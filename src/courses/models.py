@@ -1,0 +1,53 @@
+from django.db import models
+
+# Create your models here.
+
+'''
+    Course:
+        title
+        description
+        thumbnail/image
+        Access:
+            anyone
+            email required
+            Purchese required
+            User required(n/a)
+        status:
+            Published
+            Coming soon
+            Draft
+'''
+
+class PublishedStatus(models.TextChoices):
+    PUBLISHED = "pub", "Published"
+    COMING_SOON = 'soon', "Coming soon"
+    DRAFT = 'draft', 'Draft'
+
+
+class AccessRequireme(models.TextChoices):
+    ANYONE = 'any', 'Anyone'
+    EMAIL_REQUIRED = 'email_required', 'Email required'
+
+class Course(models.Model):
+    title = models.CharField(max_length=120)
+    description = models.TextField(max_length=500, blank=True, null=True)
+    image = models.ImageField(upload_to='Photos', blank=True, null=True)
+    access = models.CharField(
+        max_length=25, 
+        choices=AccessRequireme.choices,
+        default=AccessRequireme.ANYONE
+    )
+    status = models.CharField(
+        max_length=25, 
+        choices=PublishedStatus.choices, 
+        default=PublishedStatus.DRAFT
+    )
+
+    @property
+    def is_published(self):
+        return self.status == PublishedStatus.PUBLISHED
+
+
+    def __str__(self):
+        return self.title[:10]
+    
