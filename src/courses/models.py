@@ -28,14 +28,17 @@ class AccessRequireme(models.TextChoices):
     ANYONE = 'any', 'Anyone'
     EMAIL_REQUIRED = 'email_required', 'Email required'
 
+def handle_upload(instance, filename):
+    return f'{filename}'
+
 class Course(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField(max_length=500, blank=True, null=True)
-    image = models.ImageField(upload_to='Photos', blank=True, null=True)
+    image = models.ImageField(upload_to=handle_upload, blank=True, null=True)
     access = models.CharField(
         max_length=25, 
         choices=AccessRequireme.choices,
-        default=AccessRequireme.ANYONE
+        default=AccessRequireme.EMAIL_REQUIRED
     )
     status = models.CharField(
         max_length=25, 
