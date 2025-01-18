@@ -4,7 +4,7 @@ from decouple import config
 
 CLOUDINARY_CLOUD_NAME = config("CLOUDINARY_CLOUD_NAME", default="")
 CLOUDINARY_PUBLIC_API_KEY = config("CLOUDINARY_PUBLIC_API_KEY")
-CLOUDINARY_SECRET_API_KEY = config("CLOUDINARY_SECRET_KEY")
+CLOUDINARY_SECRET_API_KEY = config("CLOUDINARY_SECRET_API_KEY")
 
 def cloudinary_init():  
     cloudinary.config( 
