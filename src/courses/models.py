@@ -55,6 +55,40 @@ class Course(models.Model):
     def is_published(self):
         return self.status == PublishedStatus.PUBLISHED
 
+    @property
+    def image_admin_url(self):
+        if not self.image:
+            return ""
+        image_options = {
+            "width": 500
+        }
+        url = self.image.build_url(**image_options) # is same self.image.image(image_options)
+        return url
+
+    @property
+    def get_image_thumbnail(self, as_html=False, width=650):
+        if not self.image:
+            return ""
+        image_options = {
+            "width": width
+        }
+        if as_html:
+            # CloudinaryImage(str(self.image)).image(image_options)
+            return self.image.image(**image_options)
+        # CloudinaryImage(str(self.image)).build_url(image_options)    
+        url = self.image.build_url(**image_options)
+        return url
+
+    @property
+    def image_tag_admin_url(self):
+        if not self.image:
+            return ""
+        image_options = {
+            "width": 100
+        }
+        url = self.image.build_url(**image_options) # build_url generate url of image
+        return url 
+
 
     def __str__(self):
         return self.title[:10]
