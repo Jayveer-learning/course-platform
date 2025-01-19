@@ -92,4 +92,27 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title[:10]
-    
+
+
+
+'''
+    Lessons
+        title
+        description
+        video
+        Status:
+            Published
+            coming soon
+            Draft
+'''
+
+class Lesson(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='Course')
+    title = models.CharField(max_length=120)
+    description = models.TextField(max_length=500, blank=True, null=True)
+    can_preview = models.BooleanField(default=False, help_text="If user does not have access to course, can they see this?")
+    status = models.CharField(
+        max_length=20, 
+        choices=PublishedStatus.choices, 
+        default=PublishedStatus.PUBLISHED
+    )
