@@ -48,6 +48,10 @@ def get_public_id_prefix(instance, *args, **kwargs): # instance mean current wor
         return f"courses/{instance.id}"
     return "courses"
 
+def get_public_id(instance, *args, **kwargs):
+    return str(uuid.uuid4().int >> 20)[:8]
+
+
 def get_display_name(instance, *args, **kwargs): # display_name refers to a human-readable name for a media asset. It is used for display purposes in the Cloudinary Media Library, making it easier to identify and manage files donn't effect accessed, delivered of media assets. Just for human readability in the Cloudinary UI. it doesn't effect url only display in cloudinary dashboard. 
     title = instance.title 
     if instance.title:
@@ -61,13 +65,15 @@ def get_tags(instance, *args, **kwargs):
 class Course(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField(max_length=500, blank=True, null=True)
+    # public_id = models.CharField(max_length=130, blank=True, null=True)
     # image = models.ImageField(upload_to=handle_upload, blank=True, null=True)
     image = CloudinaryField(
         "image", 
         null=True,
         public_id_prefix=get_public_id_prefix,
         display_name=get_display_name,
-        tags=get_tags
+        tags=get_tags,
+        public_id = get_public_id
     )
     access = models.CharField(
         max_length=20, 
