@@ -6,6 +6,7 @@ from django.utils.html import format_html
 
 class LessonInline(admin.StackedInline):
     model = Lesson
+    readonly_fields = ['updated', 'timestamp']
     extra = 0 # means number of empty forms display in admin panel for adding lessons ok. 
 
 # Register your models here.
@@ -13,9 +14,9 @@ class LessonInline(admin.StackedInline):
 class CourseAdminModel(admin.ModelAdmin):
     inlines = [LessonInline] # inline Lesson class make it oneto many relationship using ForienKey. 
     list_display = ['image_tag','title', 'status', 'access']
-    fields = ['title', 'description', 'image', 'status', 'access', 'display_image']
+    fields = ['title', 'description', 'image', 'status', 'access', 'display_image', 'timestamp', 'updated']
     list_filter = ['status', 'access']
-    readonly_fields = ['display_image']
+    readonly_fields = ['display_image', 'timestamp', 'updated']
 
 
     def display_image(self, obj, *args, **kwargs):

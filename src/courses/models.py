@@ -50,7 +50,10 @@ class Course(models.Model):
         choices=PublishedStatus.choices, 
         default=PublishedStatus.DRAFT
     )
+    timestamp = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
+    
     @property
     def is_published(self):
         return self.status == PublishedStatus.PUBLISHED # return trun if self.status == to PublishedStatus.PUBLISHED if not return false. 
@@ -105,6 +108,11 @@ class Course(models.Model):
             coming soon
             Draft
 '''
+'''
+to  accessing lesson we can access using 
+
+lesson_obj = course_lesson.all()
+''' 
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='Course')
@@ -117,9 +125,27 @@ class Lesson(models.Model):
         null=True,
         resource_type="video"
     )
+    order = models.IntegerField(default=0) # defining the order of lesson model updating and creation display first lesson that created resently. 
     can_preview = models.BooleanField(default=False, help_text="If user does not have access to course, can they see this?")
     status = models.CharField(
         max_length=20, 
         choices=PublishedStatus.choices, 
         default=PublishedStatus.PUBLISHED
     )
+    timestamp = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['order', '-updated'] # 
+        """
+        Meta options for the model.
+        Attributes:
+            ordering (list): Specifies the default ordering for the model's objects.
+                The ordering is based on the 'order' field in ascending order by default.
+                This means that when querying the model using `course__lesson.objects.all()`,
+                the results will be fetched from the database in ascending order of the lessons.
+        Notes:
+            - The default ordering is ascending (smaller to higher).
+            - You can change the ordering when fetching data by using `course__lesson.objects.filter().order_by("-order")`
+              to get the data in descending order lessons.
+        """
