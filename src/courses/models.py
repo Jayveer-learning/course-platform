@@ -32,14 +32,14 @@ class AccessRequireme(models.TextChoices):
     ANYONE = 'any', 'Anyone'
     EMAIL_REQUIRED = 'email', 'Email required'
 
-def handle_upload(instance, filename):
+def handle_upload(instance, filename): # instance is name of model where this fn set. 
     return f'{filename}'
 
 class Course(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField(max_length=500, blank=True, null=True)
     # image = models.ImageField(upload_to=handle_upload, blank=True, null=True)
-    image = CloudinaryField("image", null=True)
+    image = CloudinaryField("image", null=True, use_filename=True)
     access = models.CharField(
         max_length=20, 
         choices=AccessRequireme.choices,
@@ -53,7 +53,7 @@ class Course(models.Model):
 
     @property
     def is_published(self):
-        return self.status == PublishedStatus.PUBLISHED
+        return self.status == PublishedStatus.PUBLISHED # return trun if self.status == to PublishedStatus.PUBLISHED if not return false. 
 
     @property
     def image_admin_url(self):
@@ -110,6 +110,13 @@ class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='Course')
     title = models.CharField(max_length=120)
     description = models.TextField(max_length=500, blank=True, null=True)
+    thumbanil = CloudinaryField("image", blank=True, null=True)
+    video = CloudinaryField(
+        "video", 
+        blank=True, 
+        null=True,
+        resource_type="video"
+    )
     can_preview = models.BooleanField(default=False, help_text="If user does not have access to course, can they see this?")
     status = models.CharField(
         max_length=20, 
