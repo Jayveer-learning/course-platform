@@ -1,6 +1,9 @@
 import helpers
+import uuid
 from django.db import models
 from cloudinary.models import CloudinaryField
+from django.utils.text import slugify
+
 
 helpers.cloudinary_init()
 
@@ -35,11 +38,37 @@ class AccessRequireme(models.TextChoices):
 def handle_upload(instance, filename): # instance is name of model where this fn set. 
     return f'{filename}'
 
+def get_public_id_prefix(instance, *args, **kwargs): # instance mean current working model 
+    title = instance.title 
+    if title:
+        slug = slugify(title)
+        unique_id= str(uuid.uuid4()).replace("-", "")[:5]
+        return f"courses/{instance.id}/{slug}-{unique_id}"
+    if instance.id:
+        return f"courses/{instance.id}"
+    return "courses"
+
+def get_display_name(instance, *args, **kwargs): # display_name refers to a human-readable name for a media asset. It is used for display purposes in the Cloudinary Media Library, making it easier to identify and manage files donn't effect accessed, delivered of media assets. Just for human readability in the Cloudinary UI. it doesn't effect url only display in cloudinary dashboard. 
+    title = instance.title 
+    if instance.title:
+        return title
+    return "Course Upload"
+
+def get_tags(instance, *args, **kwargs):
+    return ["course", "Thumbnail"]
+
+
 class Course(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField(max_length=500, blank=True, null=True)
     # image = models.ImageField(upload_to=handle_upload, blank=True, null=True)
-    image = CloudinaryField("image", null=True, use_filename=True)
+    image = CloudinaryField(
+        "image", 
+        null=True,
+        public_id_prefix=get_public_id_prefix,
+        display_name=get_display_name,
+        tags=get_tags
+    )
     access = models.CharField(
         max_length=20, 
         choices=AccessRequireme.choices,
@@ -53,7 +82,7 @@ class Course(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    
+
     @property
     def is_published(self):
         return self.status == PublishedStatus.PUBLISHED # return trun if self.status == to PublishedStatus.PUBLISHED if not return false. 
@@ -94,7 +123,7 @@ class Course(models.Model):
 
 
     def __str__(self):
-        return self.title[:10]
+        return self.title
 
 
 
