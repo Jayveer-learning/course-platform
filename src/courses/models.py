@@ -38,15 +38,22 @@ class AccessRequireme(models.TextChoices):
 def handle_upload(instance, filename): # instance is name of model where this fn set. 
     return f'{filename}'
 
-def get_public_id_prefix(instance, *args, **kwargs): # instance mean current working model 
+
+def generate_public_id(instance, *args, **kwargs): # instance mean current working model 
     title = instance.title 
-    if title:
-        slug = slugify(title)
-        unique_id= str(uuid.uuid4()).replace("-", "")[:5]
-        return f"courses/{instance.id}/{slug}-{unique_id}"
-    if instance.id:
-        return f"courses/{instance.id}"
-    return "courses"
+    unique_id= str(uuid.uuid4()).replace("-", "")[:5]
+    if not title: # excute when course don't have title if have this block don't execute because i use not operator convert true into fasle, false into true. 
+        return unique_id 
+    slug = slugify(title)
+    unique_id_short = unique_id[:5]
+    return f"{slug}-{unique_id_short}"
+
+
+def get_public_id_prefix(instance, *args, **kwargs): # instance mean current working model 
+    public_id = instance.public_id
+    if not public_id:
+        return "courses"
+    return f"{public_id}"
 
 def get_public_id(instance, *args, **kwargs):
     return str(uuid.uuid4().int >> 20)[:8]
@@ -55,8 +62,8 @@ def get_public_id(instance, *args, **kwargs):
 def get_display_name(instance, *args, **kwargs): # display_name refers to a human-readable name for a media asset. It is used for display purposes in the Cloudinary Media Library, making it easier to identify and manage files donn't effect accessed, delivered of media assets. Just for human readability in the Cloudinary UI. it doesn't effect url only display in cloudinary dashboard. 
     title = instance.title 
     if instance.title:
-        return title
-    return "Course Upload"
+        return f"{instance.id} - {title}"
+    return f"{instance.id} - Course Upload"
 
 def get_tags(instance, *args, **kwargs):
     return ["course", "Thumbnail"]
@@ -65,7 +72,7 @@ def get_tags(instance, *args, **kwargs):
 class Course(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField(max_length=500, blank=True, null=True)
-    # public_id = models.CharField(max_length=130, blank=True, null=True)
+    public_id = models.CharField(max_length=130, blank=True, null=True)
     # image = models.ImageField(upload_to=handle_upload, blank=True, null=True)
     image = CloudinaryField(
         "image", 
@@ -87,6 +94,15 @@ class Course(models.Model):
     )
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+
+    # the save() method is a built-in method of Django models used to save an instance of a model to the database. It is called whenever you use instance.save(). 
+    def save(self, *args, **kwargs):
+        # before save
+        if self.public_id == "" or self.public_id is None:
+            self.public_id = generate_public_id(self) # save in data base. no need to return 
+        super().save(*args, **kwargs)
+        # after save
 
 
     @property
@@ -151,6 +167,7 @@ lesson_obj = course_lesson.all()
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='Course')
+    public_id = models.CharField(max_length=130, blank=True, null=True)
     title = models.CharField(max_length=120)
     description = models.TextField(max_length=500, blank=True, null=True)
     thumbanil = CloudinaryField("image", blank=True, null=True)
@@ -184,3 +201,10 @@ class Lesson(models.Model):
             - You can change the ordering when fetching data by using `course__lesson.objects.filter().order_by("-order")`
               to get the data in descending order lessons.
         """
+    
+    def save(self, *args, **kwargs):
+        # before save
+        if self.public_id == "" or self.public_id == None:
+            self.public_id = generate_public_id(self)
+        super().save(*args, **kwargs)
+        # after save

@@ -14,9 +14,9 @@ class LessonInline(admin.StackedInline):
 class CourseAdminModel(admin.ModelAdmin):
     inlines = [LessonInline] # inline Lesson class make it oneto many relationship using ForienKey. 
     list_display = ['image_tag','title', 'status', 'access']
-    fields = ['title', 'description', 'image', 'status', 'access', 'display_image', 'timestamp', 'updated']
+    fields = ['public_id','title', 'description', 'image', 'status', 'access', 'display_image', 'timestamp', 'updated']
     list_filter = ['status', 'access']
-    readonly_fields = ['display_image', 'timestamp', 'updated']
+    readonly_fields = ['public_id', 'display_image', 'timestamp', 'updated']
 
 
     def display_image(self, obj, *args, **kwargs):
