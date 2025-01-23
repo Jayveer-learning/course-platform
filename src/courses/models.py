@@ -140,14 +140,14 @@ class Course(models.Model):
     old apparoach for image rendring
     
     @property
-    def image_admin_url(self):
-        # plance of instance we have to pass self so get_cloudinary_image_object funtion have as of models fields
-        return helpers.get_cloudinary_image_object(
-                    self, 
-                    field_name="image",
-                    as_html=False,
-                    width=500
-        )
+    def image_admin_url(self, width=400):
+        if not self.image:
+            return ""
+        image_options = {
+            "width" : 
+        }
+        url = self.image.build_url(**image_options)
+        return url
 
     @property
     def get_image_thumbnail(self, as_html=False, width=650):
@@ -214,6 +214,7 @@ class Lesson(models.Model):
         "video", 
         blank=True, 
         null=True,
+        type='private',
         resource_type="video",
         public_id_prefix=get_public_id_prefix,
         display_name=get_display_name,

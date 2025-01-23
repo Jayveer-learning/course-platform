@@ -7,8 +7,8 @@ from django.utils.html import format_html
 
 class LessonInline(admin.StackedInline):
     model = Lesson
-    fields = ['public_id', 'title', 'description', 'thumbanil', 'display_thumbnail' , 'video', 'order', 'can_preview', 'status', 'updated', 'timestamp']
-    readonly_fields = ['public_id', 'updated', 'timestamp', 'display_thumbnail']
+    fields = ['public_id', 'title', 'description', 'thumbanil', 'display_thumbnail' , 'video', 'display_video_content', 'order', 'can_preview', 'status', 'updated', 'timestamp']
+    readonly_fields = ['public_id', 'updated', 'timestamp', 'display_thumbnail', 'display_video_content']
     extra = 0 # means number of empty forms display in admin panel for adding lessons ok. 
 
     def display_thumbnail(self, obj):
@@ -22,12 +22,27 @@ class LessonInline(admin.StackedInline):
 
     display_thumbnail.short_description = 'Current Thumbail'
 
+    def display_video_content(self, obj):
+        video_embed_html = helpers.get_cloudinary_video_object(
+            obj,
+            field_name="video",
+            as_html=True,
+            width=550,
+            height=450,
+            sign_url=False,
+            fetch_format="auto",
+            quality="auto"
+        )
+        return video_embed_html # not need of fotmat_html(video_html) because we using django temlate render that generate html tags so no need for format_html(url). 
+
+    display_video_content.short_description = 'Current Video'
+
 # Register your models here.
 @admin.register(Course)
 class CourseAdminModel(admin.ModelAdmin):
     inlines = [LessonInline] # inline Lesson class make it oneto many relationship using ForienKey. 
     list_display = ['image_tag','title', 'status', 'access']
-    fields = ['public_id','title', 'description', 'image', 'status', 'access', 'display_image', 'timestamp', 'updated']
+    fields = ['public_id','title', 'description', 'image', 'display_image', 'status', 'access', 'timestamp', 'updated']
     list_filter = ['status', 'access']
     readonly_fields = ['public_id', 'display_image', 'timestamp', 'updated']
 
