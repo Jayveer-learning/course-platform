@@ -91,10 +91,10 @@ class Course(models.Model):
     image = CloudinaryField(
         "image", 
         null=True,
-        public_id_prefix=get_public_id_prefix,
+        public_id_prefix=get_public_id_prefix, # virtual directory structure don't effect accessing delivering of accets.
         display_name=get_display_name,
         tags=get_tags,
-        public_id = get_public_id
+        public_id=get_public_id
     )
     access = models.CharField(
         max_length=20, 
@@ -146,7 +146,7 @@ class Course(models.Model):
         image_options = {
             "width" : 
         }
-        url = self.image.build_url(**image_options)
+        url = self.image.build_url(**image_options) # self.image.image(**image_options) -> return html tags of image. 
         return url
 
     @property
@@ -267,6 +267,9 @@ class Lesson(models.Model):
     def tags(self):
         return ['Lesson', 'Programming Lesson', 'Coding Practice', f'{self.title}']
 
+    def __str__(self):
+        return self.title
+    
 '''
     def get_thumbnail(self):
         return helpers.get_cloudinary_image_object(

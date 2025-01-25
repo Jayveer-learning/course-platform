@@ -1,9 +1,8 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cloudinary-video-player/2.3.0/cld-video-player.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cloudinary-video-player/2.3.0/cld-video-player.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 <!-- this configuration of called self hosdted player -->
 
-<video id="demo-player" 
+<video
+    id="demo"
+    class="jh-video"
     controls 
     autoplay 
     bigPlayButton
@@ -13,15 +12,16 @@
     data-cloud-name="{{ cloud_name }}">
 </video>
 
-<script>
+<!-- i moved this code in js.html file -->
+<!-- <script>
+    // old way to render videoplayer at admin new way is in js.html page 
     const videoPlayerId = "demo-player" // id of video player so we can use anawhere just using videoPlayerId, so shortcut
     const videoPlayerElement = document.getElementById(videoPlayerId);
     if (videoPlayerElement){
         const cloudName = videoPlayerElement.dataset.cloudName; // using dataset method we can access attribute that start with data
         const videoUrl = videoPlayerElement.dataset.videoUrl;
         const cld = cloudinary.videoPlayer(videoPlayerId, { // This function initializes a new Cloudinary video player with id of html element where video player will be embedded.
-            cloudName: cloudName,
-            transformation: {crop: 'limit', width: 200}
+            cloudName: cloudName
         });
         cld.source(videoUrl) // This method sets the source of the video player to the URL specified by the videoUrl. 
     }
@@ -29,4 +29,4 @@
     // removing cloudinary link element in video player. 
     const removeElem = document.querySelector(".vjs-cloudinary-button");
     removeElem.remove()
-</script>
+</script> -->

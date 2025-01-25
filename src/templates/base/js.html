@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cloudinary-video-player/2.3.0/cld-video-player.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cloudinary-video-player/2.3.0/cld-video-player.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script defer>
+    // js.html script fn get cloudinary refrence and embed.html or services.py render. when all html document render in admin page then this script executed because we use defer. and we inlude js.html in base_site.html inside header so js.html execute script after html document laod.
+    function renderVideoElement(videoPlayerElement){ // videoPlayerElement = renderAllVideo each element
+        const currentVideoId = videoPlayerElement.getAttribute('id');
+        const videoPlayerId = `${currentVideoId}-jh-${Math.random().toString(36).substr(2,9)}`;
+        videoPlayerElement.setAttribute("id", videoPlayerId);
+        const cloudName = videoPlayerElement.dataset.cloudName;
+        const videoUrl = videoPlayerElement.dataset.videoUrl;
+        if (cloudName && videoUrl){
+            // initialize the cloudinary videPlayer with specific id and cloudname 
+            const cld = cloudinary.videoPlayer(videoPlayerId, {
+                cloudName: cloudName
+            });
+            cld.source(videoUrl); // This URL points to the video hosted on Cloudinary. Once the video source is set, the Cloudinary video player automatically fetches the video from the specified URL.
+        };
+    };
+
+    // get each video and pass in renderVideoElement fn so renderVideoElement perform task. 
+    function renderAllVideo(){
+        const videoPlayerClassNames = 'jh-video';
+        const videoPlayerElement = document.getElementsByClassName(videoPlayerClassNames); // get allvideo from cloudinary and the using for of to get on
+        for (let video of videoPlayerElement){
+            console.log(videoPlayerElement);
+            renderVideoElement(video) // pass the each video that you get from cloudinary inrenderVideoElement() function. 
+        };
+    };
+
+    document.addEventListener('DOMContentLoaded', renderAllVideo); // and call the renderAllVideo fn when html content properly laoded then call renderAllVideo fn to start proccess.
+
+</script>

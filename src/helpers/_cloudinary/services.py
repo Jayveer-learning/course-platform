@@ -42,11 +42,6 @@ def get_cloudinary_image_object(
     return url
 ''' 
 
-video_html = """
-    <video controls autoplay bigPlayButton>
-        <source src="{video_url}"></source>
-    </video>
-"""
 
 # for video
 def get_cloudinary_video_object(
@@ -66,8 +61,8 @@ def get_cloudinary_video_object(
                             ): # parameter just for change value of video_option dynamocally 
     if not hasattr(instance, field_name):
         return "" 
-    video_objest = getattr(instance, field_name) # give the value of instance fielsname if match with inatance                    
-    if not video_objest:
+    video_object = getattr(instance, field_name) # give the value of instance fielsname if match with inatance                    
+    if not video_object:
         return ""
     video_options = {
         "sign_url": sign_url,
@@ -85,10 +80,10 @@ def get_cloudinary_video_object(
         video_options['height'] = height
     if height and width:
         video_options['crop'] = "limit"
-    url = video_objest.build_url(**video_options)
+    url = video_object.build_url(**video_options) # video_object.video(**video_options) -> return video  html tags. build_url return url of video. 
     if as_html:
         templates_name = "videos/snipper/embed.html" # path template 
         tmpl = get_template(templates_name) # get_tamplate take path of template as an argument and then parse the template file and return template object. that here store in tmpl.  
-        _html = tmpl.render({'video_url': url, "cloud_name": settings.CLOUDINARY_CLOUD_NAME, 'base_color': "#007cae"}) # get_template give us an method name is render to generate html tags in string with context with httpResponse. So render fun. render context data in embed.html page so in embed.html page we can access video url using {{ video_url }} like that. 
+        _html = tmpl.render({'video_url': url, "cloud_name": settings.CLOUDINARY_CLOUD_NAME, 'base_color': "#007cae"}) # then render() fn render that context in embed.html page or we can access this data in embed.html page 
         return _html # then we return _html. so we get value of embed.html in where we call get_cloudinary_video_object 
     return url
