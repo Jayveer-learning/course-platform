@@ -79,7 +79,7 @@ def get_cloudinary_video_object(
     if height is not None:
         video_options['height'] = height
     if height and width:
-        video_options['crop'] = "limit"
+        video_options['crop'] = "limit" # crop limit specife the size of image or video
     url = video_object.build_url(**video_options) # video_object.video(**video_options) -> return video  html tags. build_url return url of video. 
     if as_html:
         templates_name = "videos/snipper/embed.html" # path template 

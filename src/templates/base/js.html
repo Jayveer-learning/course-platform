@@ -10,7 +10,7 @@
         const cloudName = videoPlayerElement.dataset.cloudName;
         const videoUrl = videoPlayerElement.dataset.videoUrl;
         if (cloudName && videoUrl){
-            // initialize the cloudinary videPlayer with specific id and cloudname 
+            // initialize the cloudinary videPlayer with specific id of element and cloudname . videoPlayerId is unique id of video tags that specific that video play in this tags.
             const cld = cloudinary.videoPlayer(videoPlayerId, {
                 cloudName: cloudName
             });
