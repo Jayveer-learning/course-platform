@@ -198,7 +198,7 @@ lesson_obj = course_lesson.all()
 ''' 
 
 class Lesson(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='Course')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course')
     public_id = models.CharField(max_length=130, blank=True, null=True)
     title = models.CharField(max_length=120)
     description = models.TextField(max_length=500, blank=True, null=True)

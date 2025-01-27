@@ -30,7 +30,7 @@ def get_lesson_detail(course_id=None, lesson_id=None):
         obj = Lesson.objects.get(
             course__id=course_id, # double underscore is use to travel foreign key relationship in django orm. means you can access from lesson course field. 
             course__status=PublishedStatus.PUBLISHED, # double underscore use to travel model relationship and access. 
-            status=PublishedStatus.PUBLISHED,
+            status=PublishedStatus.PUBLISHED, # lesson status
             id=lesson_id
         ) # in this if course__id=course_id. status of lesson course if is public course__status=PublishedStatus.PUBLISHED and id of lesson model if equal to that we provide id=lesson_id if all of this data match then get method get then data of lesson object return. 
     except:
