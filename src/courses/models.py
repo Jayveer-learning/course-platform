@@ -86,7 +86,7 @@ def get_tags(instance, *args, **kwargs):
 class Course(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField(max_length=500, blank=True, null=True)
-    public_id = models.CharField(max_length=130, blank=True, null=True)
+    public_id = models.CharField(max_length=130, blank=True, null=True,  unique=True, db_index=True) # add one more colunm in row for fast search query.
     # image = models.ImageField(upload_to=handle_upload, blank=True, null=True)
     image = CloudinaryField(
         "image", 
@@ -199,7 +199,7 @@ lesson_obj = course_lesson.all()
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course')
-    public_id = models.CharField(max_length=130, blank=True, null=True)
+    public_id = models.CharField(max_length=130, blank=True, null=True, db_index=True)
     title = models.CharField(max_length=120)
     description = models.TextField(max_length=500, blank=True, null=True)
     thumbanil = CloudinaryField(
