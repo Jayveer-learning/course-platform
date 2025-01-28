@@ -71,7 +71,7 @@ def get_public_id(instance, *args, **kwargs):
 
 def get_display_name(instance, *args, **kwargs): # display_name refers to a human-readable name for a media asset. It is used for display purposes in the Cloudinary Media Library, making it easier to identify and manage files donn't effect accessed, delivered of media assets. Just for human readability in the Cloudinary UI. it doesn't effect url only display in cloudinary dashboard. 
     if hasattr(instance, 'get_display_name'):
-        return instance.get_display_name()
+        return instance.get_display_name
     elif hasattr(instance, 'title'):
         return instance.title 
     model_class = instance.__class__ # return like that <class '__main__.Course'>
@@ -94,7 +94,7 @@ class Course(models.Model):
         public_id_prefix=get_public_id_prefix, # virtual directory structure don't effect accessing delivering of accets.
         display_name=get_display_name,
         tags=get_tags,
-        public_id=get_public_id
+        public_id=get_public_id # public_id is unique identifier  for assets accessing and delivering  in cloudinary. 
     )
     access = models.CharField(
         max_length=20, 
@@ -124,7 +124,7 @@ class Course(models.Model):
     @property
     def path(self):
         return f"/courses/{self.public_id}"
-
+    @property
     def get_display_name(self):
         return f"{self.id} - {self.title} - Course"
 
@@ -260,6 +260,7 @@ class Lesson(models.Model):
             course_path = course_path[:-1]
         return f"{course_path}/lessons/{self.public_id}" # public id have slug version of titlw with uuii[:5] id. 
 
+    @property
     def get_display_name(self):
         return f"{self.id} - {self.title} - {self.course.get_display_name()}"
 

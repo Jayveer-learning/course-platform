@@ -4,10 +4,12 @@ from .models import (
     Lesson
 )
 
-
+# return all course obj that have status in published
 def get_publish_course():
     return Course.objects.filter(status=PublishedStatus.PUBLISHED) # return objects if status field of course is Published so we use PublishedStatus,PUBLISHED class for filtering the Course objects. 
 
+
+# return an specific course obj that match condition value.
 def get_course_detail(course_public_id=None):
     if course_public_id is None:
         return None
@@ -17,11 +19,11 @@ def get_course_detail(course_public_id=None):
             status=PublishedStatus.PUBLISHED,
             public_id=course_public_id
         ) # so get data from Course objects that have status is published and id is equal to course_id is both value match then get method get the object from Course models database. and then return obj.  
-    except:
-        pass 
+    except Exception as err:
+        print(f"Course Data Query Error: {err}")
     return obj
 
-
+# return an specific lesson obj that match condition value.
 def get_lesson_detail(course_public_id=None, lesson_public_id=None):
     if course_public_id is None or lesson_public_id is None:
         return None
@@ -33,7 +35,7 @@ def get_lesson_detail(course_public_id=None, lesson_public_id=None):
             status=PublishedStatus.PUBLISHED, # lesson status
             public_id=lesson_public_id
         ) # in this if course__id=course_id. status of lesson course if is public course__status=PublishedStatus.PUBLISHED and id of lesson model if equal to that we provide id=lesson_id if all of this data match then get method get then data of lesson object return. 
-    except:
-        pass
+    except Exception as err:
+        print(f"Course Data Query Error: {err}")
     return obj
 
