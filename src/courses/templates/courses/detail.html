@@ -1,0 +1,14 @@
+{% extends "web/base.html" %}
+
+{% block title %}
+    detail of Course
+{% endblock %}
+
+{% block content %}
+<div class="my-10 mx-5">
+<h2 class="text-3xl text-red-400 my-4 text-center">{{object.title}}</h2>
+
+{% include "courses/list-display.html" with lesson=lesson_objects %}
+
+</div>
+{% endblock %}

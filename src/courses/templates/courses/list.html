@@ -1,0 +1,31 @@
+{% extends "web/base.html" %}
+
+
+{% block title %}
+    Course List
+{% endblock %}
+
+{% block content %}
+    
+<div class="my-10 mx-5">
+    <!-- <ul class="text-center text-xl">
+        {% for list in object_list %}
+            {% if User.is_authenticated %}
+           
+                <li class="list-none">
+                    <img src="{{list.image.url}}" alt="">
+                </li>
+        {% else %}
+        <li class="list-none">
+            <p><a class="text-blue-600 hover:text-blue-800 hover:underline my-5 mx-3" href="{{list.get_absolute_url}}">{{list.public_id}}</a></p>
+        </li>
+        {% endif %}
+        {% endfor %} 
+
+    </ul> -->
+    <h2 class="text-center text-2xl font-bold">Course</h2>
+    <!-- include other template previous one and this both are same. -->
+    {% include "courses/list-display.html" with lesson=object_list %}
+
+</div>
+{% endblock %}

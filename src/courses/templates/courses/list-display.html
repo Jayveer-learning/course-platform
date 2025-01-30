@@ -1,0 +1,7 @@
+<ul class="my-5 mx-5 text-center">
+    {% for detail in lesson %}
+        <li>
+            <a class="text-blue-600 text-xl m-4 hover:text-blue-800 hover:underline my-5 mx-3" href="{{detail.path}}">{{detail.public_id}}</a>
+        </li>
+    {% endfor %}
+</ul>

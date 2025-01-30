@@ -28,6 +28,29 @@
         };
     };
 
+
     document.addEventListener('DOMContentLoaded', renderAllVideo); // and call the renderAllVideo fn when html content properly laoded then call renderAllVideo fn to start proccess.
+    
+    // just removing link of claudinary from videoPlayer. 
+    function removeLink() {
+        let removeElement = document.querySelector(".vjs-cloudinary-button");
+        if (removeElement) {
+            removeElement.remove();  // Check if element exists before removing
+        }
+    }
+    
+    function call() {
+        intervalId = setInterval(removeLink, 10);  // Call removeLink every 2 seconds
+    }
+    
+    // Optionally clear the interval after 10 seconds
+    function stopRemoving() {
+        clearInterval(intervalId);  // Stops the removeLink calls after 10 seconds
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        call();  // Start the interval
+        setTimeout(stopRemoving, 20);  // Stop it after 10 seconds
+    });
 
 </script>

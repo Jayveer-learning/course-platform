@@ -3,6 +3,7 @@ from .models import (
     PublishedStatus,
     Lesson
 )
+from django.db.models import Q
 
 # return all course obj that have status in published
 def get_publish_course():
@@ -23,6 +24,18 @@ def get_course_detail(course_public_id=None):
         print(f"Course Data Query Error: {err}")
     return obj
 
+def get_course_lessons(course_obj=None):
+    lessons = Lesson.objects.none() # instance of lessons = [] you can also write this Lesson.objects.none() return None with same datatype is queryset. it does not effect code but it's good to return same datatype what we expect. 
+    if not isinstance(course_obj, Course):
+        return lessons
+    lessons = course_obj.course.filter(
+        course__status=PublishedStatus.PUBLISHED
+    ).filter(
+        Q(status=PublishedStatus.PUBLISHED) | 
+        Q(status=PublishedStatus.COMING_SOON)
+    )
+    return lessons
+
 # return an specific lesson obj that match condition value.
 def get_lesson_detail(course_public_id=None, lesson_public_id=None):
     if course_public_id is None or lesson_public_id is None:
@@ -32,9 +45,9 @@ def get_lesson_detail(course_public_id=None, lesson_public_id=None):
         obj = Lesson.objects.get(
             course__public_id=course_public_id, # double underscore is use to travel foreign key relationship in django orm. means you can access from lesson course field. 
             course__status=PublishedStatus.PUBLISHED, # double underscore use to travel model relationship and access. 
-            status=PublishedStatus.PUBLISHED, # lesson status
+            status__in=[PublishedStatus.PUBLISHED, PublishedStatus.COMING_SOON], # lesson status
             public_id=lesson_public_id
-        ) # in this if course__id=course_id. status of lesson course if is public course__status=PublishedStatus.PUBLISHED and id of lesson model if equal to that we provide id=lesson_id if all of this data match then get method get then data of lesson object return. 
+        )# in this if course__id=course_id. status of lesson course if is public course__status=PublishedStatus.PUBLISHED and id of lesson model if equal to that we provide id=lesson_id if all of this data match then get method get then data of lesson object return. 
     except Exception as err:
         print(f"Course Data Query Error: {err}")
     return obj

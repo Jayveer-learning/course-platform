@@ -113,7 +113,7 @@ class Course(models.Model):
     # the save() method is a built-in method of Django models used to save an instance of a model value in database. It is called whenever you use instance.save(). 
     def save(self, *args, **kwargs):
         # before save
-        if self.public_id == "" or self.public_id is None:
+        if self.public_id == "" or self.public_id is None or self.public_id != self.title:
             self.public_id = generate_public_id(self) # save in data base. no need to return 
         super().save(*args, **kwargs)
         # after save
@@ -124,6 +124,7 @@ class Course(models.Model):
     @property
     def path(self):
         return f"/courses/{self.public_id}"
+
     @property
     def get_display_name(self):
         return f"{self.id} - {self.title} - Course"
@@ -247,22 +248,23 @@ class Lesson(models.Model):
     
     def save(self, *args, **kwargs):
         # before save
-        if self.public_id == "" or self.public_id == None:
-            self.public_id = generate_public_id(self)
+        if self.public_id == "" or self.public_id is None or self.public_id != self.title:
+            self.public_id = generate_public_id(self) # save in data base. no need to return 
         super().save(*args, **kwargs)
-        # after save
 
+    def get_absolute_url(self):
+        return self.path
 
     @property
     def path(self):
-        course_path = self.course.path
+        course_path = self.course.path # course.path == "/courses/{self.public_id}"
         if course_path.endswith("/"):
             course_path = course_path[:-1]
         return f"{course_path}/lessons/{self.public_id}" # public id have slug version of titlw with uuii[:5] id. 
 
     @property
     def get_display_name(self):
-        return f"{self.id} - {self.title} - {self.course.get_display_name()}"
+        return f"{self.id} - {self.title} - {self.course.get_display_name}"
 
     @property
     def tags(self):
@@ -271,6 +273,9 @@ class Lesson(models.Model):
     def __str__(self):
         return self.title
     
+    def is_coming_soon(self):
+        return self.status == PublishedStatus.COMING_SOON
+        
 '''
     def get_thumbnail(self):
         return helpers.get_cloudinary_image_object(
