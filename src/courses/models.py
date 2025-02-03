@@ -91,7 +91,7 @@ class Course(models.Model):
     image = CloudinaryField(
         "image", 
         null=True,
-        public_id_prefix=get_public_id_prefix, # virtual directory structure don't effect accessing delivering of accets.
+        public_id_prefix=get_public_id_prefix, # virtual directory structure don't effect accessing delivering of accets but in url of assets for virtual directory structure.
         display_name=get_display_name,
         tags=get_tags,
         public_id=get_public_id # public_id is unique identifier  for assets accessing and delivering  in cloudinary. 
@@ -192,11 +192,14 @@ class Course(models.Model):
             coming soon
             Draft
 '''
-'''
-to  accessing lesson we can access using 
 
-lesson_obj = course_lesson.all()
-''' 
+'''
+
+course_obj = Course.Objects.filter(status=PublishedStatus.PUBLISHED)
+all_lesson_obj = course_obj.course.filter(status=PublishedStatus.PUBLISHED)
+lesson_obj = Lesson.Objects.get(course__status=PublishedStatus.PUBLISHED, course__public_id=public_id, status=PublishedStatus.PUBLISHED, public_id=public_id)
+
+'''
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course')
@@ -260,7 +263,7 @@ class Lesson(models.Model):
         course_path = self.course.path # course.path == "/courses/{self.public_id}"
         if course_path.endswith("/"):
             course_path = course_path[:-1]
-        return f"{course_path}/lessons/{self.public_id}" # public id have slug version of titlw with uuii[:5] id. 
+        return f"{course_path}/lessons/{self.public_id}" # public id have slug version of title with uuii[:5] digit unique id. 
 
     @property
     def get_display_name(self):
@@ -274,7 +277,7 @@ class Lesson(models.Model):
         return self.title
     
     def is_coming_soon(self):
-        return self.status == PublishedStatus.COMING_SOON
+        return self.status == PublishedStatus.COMING_SOON # return true if status if COMING_SOON
         
 '''
     def get_thumbnail(self):

@@ -48,7 +48,7 @@
         clearInterval(intervalId);  // Stops the removeLink calls after 10 seconds
     }
     
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function() {
         call();  // Start the interval
         setTimeout(stopRemoving, 20);  // Stop it after 10 seconds
     });

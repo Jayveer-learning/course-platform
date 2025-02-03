@@ -9,13 +9,14 @@
     <h3 class="text-center font-bold text-3xl my-4">{{lesson.title}}</h3>
     {% if lesson.is_coming_soon %}
     <h4 class="text-2xl font-semibold text-red-700 text-center">
-        Coming Soon 
+        Coming Soon
     </h4>
-    {% endif %}
+    {% else %}
     <div class="flex justify-center">
         <img class="" src="{{lesson.thumbanil.url}}" alt="">
         {% comment %} <video src="{{lesson.video.url}}"></video> {% endcomment %}
     </div>
+    {% endif %}
 
 </div>
 {% endblock %}

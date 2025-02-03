@@ -1,7 +1,12 @@
 <ul class="my-5 mx-5 text-center">
     {% for detail in lesson %}
         <li>
-            <a class="text-blue-600 text-xl m-4 hover:text-blue-800 hover:underline my-5 mx-3" href="{{detail.path}}">{{detail.public_id}}</a>
+            <a class="text-blue-600 text-xl m-4 hover:text-blue-800 hover:underline my-5 mx-3 inline-block" href="{{detail.path}}">{{detail.public_id}}</a>
+            {% if detail.is_coming_soon %}
+                <p class="text-red-500 font-semibold text-xl inline-block">- Coming Soon</p>
+            {% else %}
+                <p class="text-green-500 font-semibold text-xl inline-block">- Public</p> 
+            {% endif %}
         </li>
     {% endfor %}
 </ul>
