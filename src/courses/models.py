@@ -91,7 +91,7 @@ class Course(models.Model):
     image = CloudinaryField(
         "image", 
         null=True,
-        public_id_prefix=get_public_id_prefix, # virtual directory structure don't effect accessing delivering of accets but in url of assets for virtual directory structure.
+        public_id_prefix=get_public_id_prefix, # virtual directory structure don't effect accessing delivering of accets.
         display_name=get_display_name,
         tags=get_tags,
         public_id=get_public_id # public_id is unique identifier  for assets accessing and delivering  in cloudinary. 
@@ -192,14 +192,11 @@ class Course(models.Model):
             coming soon
             Draft
 '''
-
 '''
+to  accessing lesson we can access using 
 
-course_obj = Course.Objects.filter(status=PublishedStatus.PUBLISHED)
-all_lesson_obj = course_obj.course.filter(status=PublishedStatus.PUBLISHED)
-lesson_obj = Lesson.Objects.get(course__status=PublishedStatus.PUBLISHED, course__public_id=public_id, status=PublishedStatus.PUBLISHED, public_id=public_id)
-
-'''
+lesson_obj = course_lesson.all()
+''' 
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course')
@@ -276,9 +273,13 @@ class Lesson(models.Model):
     def __str__(self):
         return self.title
     
+    @property
     def is_coming_soon(self):
         return self.status == PublishedStatus.COMING_SOON # return true if status if COMING_SOON
-        
+    
+    @property
+    def has_video(self):
+        return self.video is not None
 '''
     def get_thumbnail(self):
         return helpers.get_cloudinary_image_object(

@@ -1,5 +1,6 @@
 from django.http import Http404, JsonResponse
 from django.shortcuts import render, HttpResponse
+import helpers
 
 from . import services
 
@@ -43,8 +44,24 @@ def lesson_list_view(request, course_public_id=None, lesson_public_id=None, *arg
     )
     if lesson_obj is None:
         raise Http404()
+    template_name = "courses/lesson-coming-soon.html"
     context = {
         "lesson": lesson_obj
     }
+    if not lesson_obj.is_coming_soon and lesson_obj.has_video:
+        '''
+        Execute if lesson is publishe, and video is available
+        '''
+        template_name = "courses/lesson.html"
+        video_embed_html = helpers.get_cloudinary_video_object(
+            lesson_obj,
+            field_name="video",
+            as_html=True,
+            width=800,
+            sign_url=False,
+            fetch_format="auto",
+            quality="auto"
+        )
+        context['video_embed'] = video_embed_html
     # return JsonResponse({"data": lesson_obj.path})
-    return render(request, "courses/lesson.html", context)
+    return render(request, template_name, context)

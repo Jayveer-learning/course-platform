@@ -49,6 +49,6 @@ def get_lesson_detail(course_public_id=None, lesson_public_id=None):
             public_id=lesson_public_id
         )# in this if course__id=course_id. status of lesson course if is public course__status=PublishedStatus.PUBLISHED and id of lesson model if equal to that we provide id=lesson_id if all of this data match then get method get then data of lesson object return. 
     except Exception as err:
-        print(f"Course Data Query Error: {err}")
+        print(f"Lesson Data Query Error: {err}")
     return obj
 

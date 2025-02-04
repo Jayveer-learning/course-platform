@@ -1,0 +1,24 @@
+{% extends "web/base.html" %}
+
+{% block title %}
+    Coming soon
+{% endblock %}
+
+{% block content %}
+<div class="my-10 mx-5">
+    
+
+{% if lesson.is_coming_soon %}
+
+<div class="text-center">
+    <h3 class=" font-bold text-3xl my-4 text-gray-600 inline-block">{{lesson.title}}</h3>
+    <h4 class="text-2xl font-semibold text-red-700 inline-block">
+         - Coming Soon
+    </h4>
+    
+</div>
+
+{% endif %}
+
+</div>
+{% endblock %}

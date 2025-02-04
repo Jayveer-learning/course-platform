@@ -12,7 +12,7 @@
         if (cloudName && videoUrl){
             // initialize the cloudinary videPlayer with specific id of element and cloudname . videoPlayerId is unique id of video tags that specific that video play in this tags.
             const cld = cloudinary.videoPlayer(videoPlayerId, {
-                cloudName: cloudName
+                cloudName: cloudName // cloud name specified which cloud have this video and sourse give specific video url after this cloudinary fetche video from you cloud.  
             });
             cld.source(videoUrl); // This URL points to the video hosted on Cloudinary. Once the video source is set, the Cloudinary video player automatically fetches the video from the specified URL.
         };
@@ -23,7 +23,6 @@
         const videoPlayerClassNames = 'jh-video';
         const videoPlayerElement = document.getElementsByClassName(videoPlayerClassNames); // get allvideo from cloudinary and the using for of to get on
         for (let video of videoPlayerElement){
-            console.log(videoPlayerElement);
             renderVideoElement(video) // pass the each video that you get from cloudinary inrenderVideoElement() function. 
         };
     };
