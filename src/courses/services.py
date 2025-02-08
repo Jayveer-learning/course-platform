@@ -28,7 +28,7 @@ def get_course_lessons(course_obj=None):
     lessons = Lesson.objects.none() # instance of lessons = [] you can also write this Lesson.objects.none() return None with same datatype is queryset. it does not effect code but it's good to return same datatype what we expect. 
     if not isinstance(course_obj, Course):
         return lessons
-    lessons = course_obj.course.filter(
+    lessons = course_obj.course.filter(  # reverse relationship to all related object/models. 
         course__status=PublishedStatus.PUBLISHED
     ).filter(
         Q(status=PublishedStatus.PUBLISHED) | 

@@ -50,7 +50,7 @@ def lesson_list_view(request, course_public_id=None, lesson_public_id=None, *arg
     }
     if not lesson_obj.is_coming_soon and lesson_obj.has_video:
         '''
-        Execute if lesson is publishe, and video is available
+        Execute if lesson is publishe, and video is available.
         '''
         template_name = "courses/lesson.html"
         video_embed_html = helpers.get_cloudinary_video_object(
