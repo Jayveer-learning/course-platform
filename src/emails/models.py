@@ -15,15 +15,18 @@ Email verification for short-lived access
 
 class Email(models.Model):
     email = models.EmailField(unique=True)
+    activate = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-
+    def __str__(self):
+        return self.email
+    
 
 class EmailVerification(models.Model):
-    parent = models.ForeignKey(Email, on_delete=models.CASCADE, related_name="user_email")
+    parent = models.ForeignKey(Email, on_delete=models.SET_NULL, null=True, related_name="user_email")
     email = models.EmailField()
     # token
-    attempts = models.IntegerField()
+    attempts = models.IntegerField(null=True)
     last_attempt_at = models.DateTimeField(
         auto_now=True,
         auto_now_add=False,

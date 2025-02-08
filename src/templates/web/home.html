@@ -3,3 +3,17 @@
 {% block title %}
 Course Home Page
 {% endblock %}
+
+{% block content %}
+
+<h1>Email Form</h1>
+
+<div>
+    <form method="POST" action=".">
+        {% csrf_token %}
+        {{ email_form }}
+        <button class="items-center font-semibold text-xl m-3 p-2" type="submit">Login</button>
+    </form>
+</div>
+  
+{% endblock %}

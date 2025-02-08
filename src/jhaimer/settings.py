@@ -153,6 +153,7 @@ CLOUDINARY_SECRET_API_KEY = config("CLOUDINARY_SECRET_API_KEY")
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config("EMAIL_HOST", cast=str, default=None)
 EMAIL_PORT = config("EMAIL_PORT", cast=str, default='587') # Recommended port is 587 but i am using 465 SSL
+EMAIL_ADDRESS = config("EMAIL_ADDRESS", cast=str, default="Error")
 EMAIL_HOST_USER = config("EMAIL_HOST_USER", cast=str, default=None)
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", cast=str, default=None)
 # EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool, default=True)  # Use EMAIL_PORT 587 for TLS
