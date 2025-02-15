@@ -1,7 +1,7 @@
 {% extends "admin/base_site.html" %} <!-- we axtend this template from django.contrib.admin - base_site.html template of admin site -->
 
 {% block extrahead %}
-{{ block.super }}
+{{ block.super }} <!-- don't get overrigth content of templae -->
 
 {% include 'base/js.html' %}  <!-- extrahead block include this in head the html document in admin/base_site.html means admin page. -->
 <script>

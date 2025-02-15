@@ -166,7 +166,7 @@ ADMIN_USER_EMAIL = config("ADMIN_USER_EMAIL", default=None)
 
 MANAGERS = []
 ADMINS = []
-if all([ADMIN_USER_NAME, ADMIN_USER_EMAIL]):
+if all([ADMIN_USER_NAME, ADMIN_USER_EMAIL]): # all true true if passed values are true is not return false. 
     ADMINS += [
         (f'{ADMIN_USER_NAME}', f'{ADMIN_USER_EMAIL}')
     ]

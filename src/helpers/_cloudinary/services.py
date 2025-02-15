@@ -3,7 +3,7 @@ from django.template.loader import get_template
 
 # for image
 def get_cloudinary_image_object(
-                                instance, 
+                                instance, # self/obj
                                 field_name="image",
                                 as_html=False,
                                 width=1200
@@ -45,7 +45,7 @@ def get_cloudinary_image_object(
 
 # for video
 def get_cloudinary_video_object(
-                                instance, 
+                                instance, # self/obj
                                 field_name="video",
                                 as_html=False,
                                 width=None,
